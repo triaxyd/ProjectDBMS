@@ -1,0 +1,31 @@
+//POSITIONS
+create table Positions				
+(
+    id int,
+    vessel_id varchar,
+    t timestamp,
+    lon numeric(7,5),
+    lat numeric(7,5),
+    heading int,
+    course numeric(4,1),
+    speed numeric(4,1),
+
+    primary key (id)
+
+);
+
+//VESSELS 
+create table Vessels
+(
+	id varchar,
+	type integer,
+	flag varchar
+
+);
+
+
+//VESSEL_TYPES
+Create table Vessel_Types
+(
+
+);
