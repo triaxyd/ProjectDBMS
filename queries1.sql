@@ -15,16 +15,21 @@ group by vessel_types.code;
 -- iii. ***
 with ships_speed_greater_30 as
 (
-    select positions.vessel_id 
+    select positions.vessel_id, vessels.type
     from positions 
-    where positions.speed>30
+    join vessels on positions.vessel_id = vessels.id
+    where positions.speed > 30
+),
+count_of_vessels as
+( 
+    select type, count(*) as vessels_total
+    from ships_speed_greater_30
+    group by type
 )
 
-select vessel_types.description as vessel_type,count(*) as ships_total 
-from ships_speed_greater_30 join vessels on ships_speed_greater_30.vessel_id = vessels.id
-    join vessel_types on vessels.type = vessel_types.code
-group by vessel_types.description;
-
+select distinct(ships_speed_greater_30.vessel_id) , count_of_vessels.type,count_of_vessels.vessels_total 
+from ships_speed_greater_30 join count_of_vessels on ships_speed_greater_30.type= count_of_vessels.type
+order by type desc;
 
 -- iv. ****
 /* 
