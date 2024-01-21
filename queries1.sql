@@ -32,15 +32,6 @@ from ships_speed_greater_30 join count_of_vessels on ships_speed_greater_30.type
 order by type desc;
 
 -- iv. ****
-/* 
-select date(positions.t) as day, count(*) as coordinate_count
-from positions
-join vessels on positions.vessel_id = vessels.id
-where vessels.type between 60 and 69
-and positions.t between '2019-08-14'::timestamp and '2019-08-19'::timestamp
-group by day;
-*/
-
 with passenger_vessels as
 (
     select vessels.id
@@ -48,11 +39,10 @@ with passenger_vessels as
     where vessel_types.description like 'Passenger%'
 )
 
-select count(*) as vessels_per_day
+select count(*) as vessels_per_day, positions.t::date as date
 from positions join passenger_vessels on positions.vessel_id = passenger_vessels.id
 group by positions.t::date 
 having positions.t::date >= '2019-08-14' and positions.t::date <= '2019-08-18'
-
 
 -- v. ******
 with cargo_vessels as
