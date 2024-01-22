@@ -1,9 +1,9 @@
 
 -- i. *
-select date(t) as day, count(*) as coordinate_count 
-from positions
-group by day
-order by coordinate_count desc;
+select t::date as coord_date, count(distinct lon || ',' || lat) as coords
+from positions 
+group by coord_date
+order by coords desc;
 
 
 -- ii. **
@@ -11,6 +11,7 @@ select vessel_types.code,count(vessels.id)
 from vessel_types left join vessels on vessel_types.code = vessels.type
 and vessels.flag = 'Greece'
 group by vessel_types.code;
+
 
 -- iii. ***
 with ships_speed_greater_30 as
@@ -31,6 +32,7 @@ select distinct(ships_speed_greater_30.vessel_id) , count_of_vessels.type,count_
 from ships_speed_greater_30 join count_of_vessels on ships_speed_greater_30.type= count_of_vessels.type
 order by type desc;
 
+
 -- iv. ****
 with passenger_vessels as
 (
@@ -39,10 +41,11 @@ with passenger_vessels as
     where vessel_types.description like 'Passenger%'
 )
 
-select count(*) as vessels_per_day, positions.t::date as date
+select count(distinct lon || ',' || lat) as coords_per_day, positions.t::date as date
 from positions join passenger_vessels on positions.vessel_id = passenger_vessels.id
 group by positions.t::date 
 having positions.t::date >= '2019-08-14' and positions.t::date <= '2019-08-18'
+
 
 -- v. ******
 with cargo_vessels as
