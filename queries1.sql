@@ -65,4 +65,4 @@ select cargo_vessels.id
 from cargo_vessels join positions on cargo_vessels.id = positions.vessel_id
 where positions.speed = 0 and t>='2019-08-12' and t<='2019-08-19'
 group by cargo_vessels.id 
-having count(distinct date(t)) = (date '2019-08-19' - date '2019-08-12');
+having count(distinct t::date) = (date '2019-08-19' - date '2019-08-12');
