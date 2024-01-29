@@ -92,7 +92,7 @@ for values from ('2019-08-30') to ('2019-08-31');
 
 -- i. *
 select t as coord_date, count(distinct lon || ',' || lat) as coords
-from positions
+from positions_partitioned 
 group by coord_date
 order by coords desc;
 
