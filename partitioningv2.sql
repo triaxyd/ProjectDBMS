@@ -135,3 +135,5 @@ where pp.speed = 0 and t>='2019-08-12' and t<='2019-08-19'
 group by cargo_vessels.id
 having count(distinct t) = (date '2019-08-19' - date '2019-08-12');
 
+create index partitioned_vessel_id_dates_speed_index on positions_partitioned(vessel_id,t,speed) where speed = 0;
+
