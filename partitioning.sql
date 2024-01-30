@@ -98,13 +98,11 @@ from positions_partitioned
 group by coord_date
 order by coords desc;
 
-create index partitioned_dates_coords_index on positions_partitioned((t),lon,lat);
-
+create index partitioned_dates_coords_index on positions_partitioned(t,lon,lat);
 
 
 -- ii. **
 -- no need for index, already exists for vessel_types and vessels
-
 
 
 -- iii. ***
@@ -142,7 +140,7 @@ from positions_partitioned as pp join passenger_vessels on pp.vessel_id = passen
 group by pp.t
 having pp.t >= '2019-08-14' and pp.t <= '2019-08-18'
 
-create index partitioned_vessel_id_dates_coords_index on positions(vessel_id,(t),lon,lat);
+create index partitioned_vessel_id_dates_coords_index on positions_partitioned(vessel_id,t,lon,lat);
 
 
 
