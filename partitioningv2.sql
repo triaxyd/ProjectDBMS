@@ -88,6 +88,8 @@ for values from ('2019-08-29') to ('2019-08-30');
 create table positions_2019_08_30 partition of Positions_Partitioned
 for values from ('2019-08-30') to ('2019-08-31');
 
+
+
 --New Queries + Indexes
 
 -- i. *
@@ -97,6 +99,35 @@ group by coord_date
 order by coords desc;
 
 create index partitioned_dates_coords_index on positions_partitioned((t),lon,lat);
+
+
+
+-- ii. **
+-- no need for index, already exists for vessel_types and vessels
+
+
+
+-- iii. ***
+with ships_speed_greater_30 as
+(
+    select pp.vessel_id, vessels.type
+    from positions_partitioned as pp 
+    join vessels on pp.vessel_id = vessels.id
+    where pp.speed > 30
+),
+count_of_vessels as
+( 
+    select type, count(*) as vessels_total
+    from ships_speed_greater_30
+    group by type
+)
+
+select distinct(ships_speed_greater_30.vessel_id) , count_of_vessels.type,count_of_vessels.vessels_total 
+from ships_speed_greater_30 join count_of_vessels on ships_speed_greater_30.type= count_of_vessels.type
+order by type desc;
+
+create index partitioned_vessel_id_speed_index on positions_partitioned(vessel_id,speed) where speed>30;
+
 
 
 -- iv. ****
@@ -115,7 +146,7 @@ create index partitioned_vessel_id_dates_coords_index on positions(vessel_id,(t)
 
 
 
--- v. ******
+-- v. *****
 with cargo_vessels as
 (
 	select vessels.id
