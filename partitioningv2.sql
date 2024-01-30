@@ -88,13 +88,16 @@ for values from ('2019-08-29') to ('2019-08-30');
 create table positions_2019_08_30 partition of Positions_Partitioned
 for values from ('2019-08-30') to ('2019-08-31');
 
---New Queries
+--New Queries + Indexes
 
 -- i. *
 select t as coord_date, count(distinct lon || ',' || lat) as coords
 from positions_partitioned 
 group by coord_date
 order by coords desc;
+
+create index partitioned_dates_coords_index on positions_partitioned((t),lon,lat);
+
 
 -- iv. ****
 with passenger_vessels as
@@ -107,6 +110,10 @@ select count(distinct lon || ',' || lat) as coords_per_day, pp.t as date
 from positions_partitioned as pp join passenger_vessels on pp.vessel_id = passenger_vessels.id
 group by pp.t
 having pp.t >= '2019-08-14' and pp.t <= '2019-08-18'
+
+create index partitioned_vessel_id_dates_coords_index on positions(vessel_id,(t),lon,lat);
+
+
 
 -- v. ******
 with cargo_vessels as
