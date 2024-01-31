@@ -11,7 +11,7 @@ create table Positions_Partitioned
 	course numeric(4,1),
 	speed numeric(4,1),
 
-	primary key (id,t), -- doensn't work without pk t
+	primary key (id,t), -- we need t in primary key in order to work
 	foreign key (vessel_id) references Vessels(id)
 ) partition by range(t);
 
@@ -20,7 +20,7 @@ create table positions_2019_08_01 partition of Positions_Partitioned
 for values from ('2019-08-01') to ('2019-08-02');
 
 create table positions_2019_08_02 partition of Positions_Partitioned
-for values from ('2019-08-02 ') to ('2019-08-03 ');
+for values from ('2019-08-02') to ('2019-08-03');
 
 create table positions_2019_08_03 partition of Positions_Partitioned
 for values from ('2019-08-03') to ('2019-08-04');
@@ -102,7 +102,7 @@ create index partitioned_dates_coords_index on positions_partitioned(t,lon,lat);
 
 
 -- ii. **
--- no need for index, already exists for vessel_types and vessels
+-- Positions table is not used for query 2,no need for index.
 
 
 -- iii. ***
