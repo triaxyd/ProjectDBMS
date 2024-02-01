@@ -17,7 +17,7 @@ plt.plot(x_values, query51, label='Query 5.1')
 plt.plot(x_values, query52, label='Query 5.2')
 
 plt.xlabel('Question')
-plt.ylabel('Execution Time')
+plt.ylabel('Execution Time (Seconds)')
 plt.title('Execution Time Per Query')
 
 plt.xticks(x_values)
