@@ -4,7 +4,7 @@ create table Positions_Partitioned
 (
 	id integer,
 	vessel_id varchar,
-	t timestamp,
+	t date,
 	lon numeric(7,5),
 	lat numeric(7,5),
 	heading int,
